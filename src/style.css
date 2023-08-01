@@ -69,6 +69,8 @@
 .content-box {
     flex: 7;
     padding: 30px;
+    max-height: 750px;
+    overflow-y: auto;
     /*  */
     position: relative;
     display: flex;
