@@ -82,10 +82,10 @@ function displayController(projectList) {
     let index = projectList.selectedIndex
     if(!index || index > projectList.projectArr.length - 1) index = 0 // error prevent
     const selectedProject = projectList.projectArr[index] // by default, select project#1
-    console.log(projectList)
+    // console.log(projectList)
     const contentBoxTitle = createDiv('h1')
     const deleteIcon = createDiv('img')
-    contentBoxTitle.setAttribute('project-index', 0)
+    contentBoxTitle.setAttribute('project-index', index)
     contentBoxTitle.textContent = selectedProject.name
     deleteIcon.src = deleteImage
     deleteIcon.classList.add('icon')

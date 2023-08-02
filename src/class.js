@@ -10,6 +10,9 @@ class ProjectList {
     remove(index) {
         this.projectArr.splice(index, 1)
     }
+    getLastIndex(){
+        return this.projectArr.length - 1
+    }
 }
 
 class Project {

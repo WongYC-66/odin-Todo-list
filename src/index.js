@@ -5,14 +5,24 @@ import {
 } from './dom'
 import './style.css'
 
-
-const projectList = new ProjectList('myNewProjectList')
+let projectList = new ProjectList('myNewProjectList')
 const defaultProject = new Project('default')
 const defaultTodoItem = new Todo({ title: 'todo Item #1', description: 'no descrption', dueDate: '2023-08-21', priority: 'low' })
 let currentProject = defaultProject
-let editMode = { mode : false, editingTodo : null}
+let editMode = { mode: false, editingTodo: null }
 defaultProject.addTodo(defaultTodoItem)
 projectList.add(defaultProject)
+
+if (getLocalCache()) {
+    console.log('cache found')
+    let dataArray = getLocalCache()
+    projectList = dataArray[0]
+    currentProject = dataArray[1] // overwrite with localStorage
+    console.log(projectList)
+    console.log(currentProject)
+} else {
+    console.log('no cache')
+}
 
 initialisePage()
 renderPage(projectList)
@@ -30,7 +40,12 @@ confirmAddProject.addEventListener('click', () => {
     if (value) {
         const newProject = new Project(value)
         projectList.add(newProject)
+        currentProject = newProject
+        projectList.selectedIndex = projectList.getLastIndex()
+
         renderPage(projectList)
+        saveToLocal(projectList)
+
     }
 })
 cancelAddProject.addEventListener('click', () => {
@@ -48,8 +63,8 @@ confirmAddTodo.parentNode.addEventListener('submit', e => {
         priority: form.querySelector('select').value
     }
     // console.log(newTodo)
-    if( editMode.mode ){
-        editMode.mode  = false  // update Todo
+    if (editMode.mode) {
+        editMode.mode = false  // update Todo
         console.log(editMode.editingTodo)
         editMode.editingTodo.edit(value)
         editMode.editingTodo = null
@@ -58,6 +73,8 @@ confirmAddTodo.parentNode.addEventListener('submit', e => {
         currentProject.addTodo(newTodo) // add newTodo
     }
     renderPage(projectList)
+    saveToLocal(projectList)
+
 })
 cancelAddTodo.addEventListener('click', () => {
     closeAddTodoForm()
@@ -82,6 +99,8 @@ function activateButtons() {
         let projectIndex = e.target.parentNode.getAttribute('project-index')
         projectList.remove(projectIndex)
         renderPage(projectList)
+        saveToLocal(projectList)
+
     })
 
     // delete to-do icon
@@ -90,6 +109,7 @@ function activateButtons() {
             let index = x.parentNode.getAttribute('todo-index')
             currentProject.removeTodo(index)
             renderPage(projectList)
+            saveToLocal(projectList)
         })
     })
 
@@ -101,6 +121,8 @@ function activateButtons() {
             editMode.editingTodo = currentProject.todoArray[index]
             // console.log(index, editMode)
             showAddTodoForm('edit')
+            saveToLocal(projectList)
+
         })
     })
 
@@ -110,6 +132,8 @@ function activateButtons() {
             projectList.selectedIndex = i
             currentProject = projectList.projectArr[i]
             renderPage(projectList)
+            saveToLocal(projectList)
+
         })
     })
 
@@ -118,6 +142,34 @@ function activateButtons() {
 function renderPage(projectList) {
     displayController(projectList)
     activateButtons()
+}
+
+function saveToLocal(projectList) {
+    localStorage.setItem('data', JSON.stringify(projectList))
+}
+
+function getLocalCache() {
+    let data = JSON.parse(localStorage.getItem('data'))
+    // console.log(data)
+    if (!data) return false
+    if (data) {
+        const newProjectList = new ProjectList(data.name)
+        newProjectList.selectedIndex = data.selectedIndex
+
+        data.projectArr.forEach(x => {
+            let newProject = new Project(x.name)
+            x.todoArray.forEach(y => {
+                let newTodo = new Todo(y)
+                newProject.addTodo(newTodo)
+            })
+            newProjectList.add(newProject)
+        })
+
+        // replace
+        const newCurrentProject = newProjectList.projectArr[newProjectList.selectedIndex]
+        return [newProjectList, newCurrentProject]
+    }
+
 }
 
 
