@@ -83,19 +83,24 @@
     /* border: 1px solid black; */
     padding: 10px 0px;
     /*  */
-    display: flex;
+    /* display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 15px; */
+    display: grid;
+    grid-template-columns: 1fr 13fr 3fr 1fr 1fr 1fr;
+    align-items: center;
     gap: 15px;
+}
+.todo-card.cross-out{
+    font-style: italic;
+    text-decoration: line-through;
+    background-color: #53535353;
+
 }
 .todo-card:hover{
     background-color: #53535353;
 }
-
-.todo-card p:first-child{
-    flex: 1;
-}
-
 .icon{
     width: 30px;
 }

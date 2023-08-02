@@ -18,8 +18,8 @@ if (getLocalCache()) {
     let dataArray = getLocalCache()
     projectList = dataArray[0]
     currentProject = dataArray[1] // overwrite with localStorage
-    console.log(projectList)
-    console.log(currentProject)
+    // console.log(projectList)
+    // console.log(currentProject)
 } else {
     console.log('no cache')
 }
@@ -65,7 +65,7 @@ confirmAddTodo.parentNode.addEventListener('submit', e => {
     // console.log(newTodo)
     if (editMode.mode) {
         editMode.mode = false  // update Todo
-        console.log(editMode.editingTodo)
+        // console.log(editMode.editingTodo)
         editMode.editingTodo.edit(value)
         editMode.editingTodo = null
     } else {
@@ -89,6 +89,7 @@ function activateButtons() {
         showAddProjectForm()
     })
     addTodoBtn.addEventListener('click', () => {
+        if(!currentProject) return alert('Please create new project first')
         showAddTodoForm()
     })
 
@@ -102,11 +103,23 @@ function activateButtons() {
         saveToLocal(projectList)
 
     })
+    // checkbox Todo Card
+    document.querySelectorAll('.todo-card input[type="checkbox"]').forEach(x => {
+        x.addEventListener('click', () => {
+            let index = x.parentNode.getAttribute('todo-index')
+            // console.log('checkbox click')
+            updateSelectedProjectIndex(projectList, x)
+            currentProject.todoArray[index].toggleChecked();
+            renderPage(projectList)
+            saveToLocal(projectList)
+        })
+    })
 
     // delete to-do icon
     document.querySelectorAll('.todo-card .icon:nth-of-type(2)').forEach(x => {
         x.addEventListener('click', () => {
             let index = x.parentNode.getAttribute('todo-index')
+            updateSelectedProjectIndex(projectList, x)
             currentProject.removeTodo(index)
             renderPage(projectList)
             saveToLocal(projectList)
@@ -118,6 +131,7 @@ function activateButtons() {
         x.addEventListener('click', () => {
             editMode.mode = true
             let index = x.parentNode.getAttribute('todo-index')
+            updateSelectedProjectIndex(projectList, x)
             editMode.editingTodo = currentProject.todoArray[index]
             // console.log(index, editMode)
             showAddTodoForm('edit')
@@ -142,6 +156,11 @@ function activateButtons() {
 function renderPage(projectList) {
     displayController(projectList)
     activateButtons()
+}
+
+function updateSelectedProjectIndex(projectList, el) {
+    let projectIndex = el.parentNode.parentNode.firstChild.getAttribute('project-index')
+    projectList.selectedIndex = projectIndex
 }
 
 function saveToLocal(projectList) {

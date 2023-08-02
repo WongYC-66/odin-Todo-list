@@ -26,6 +26,8 @@ class Project {
     removeTodo(index) {
         this.todoArray.splice(index, 1)
     }
+    
+    // below not used. maybe for future
     moveItemToNewProject(index, Project) {
         let item = this.todoArray[index]
         this.removeTodo(index)
@@ -34,20 +36,25 @@ class Project {
 }
 
 class Todo {
-    constructor({title, description, dueDate, priority}) {
+    constructor({title, description, dueDate, priority, isChecked}) {
         this.title = title
         this.description = description
         this.dueDate = dueDate
         this.priority = priority
-    }
-    changePriority(newValue) {
-        this.priortity = newValue
+        this.isChecked = isChecked;
     }
     edit({title, description, dueDate, priority}) {
         this.title = title
         this.description = description
         this.dueDate = dueDate
         this.priority = priority
+    }
+    toggleChecked(){
+        this.isChecked = ! this.isChecked 
+    }
+    // below not used. maybe for future
+    changePriority(newValue) {
+        this.priortity = newValue
     }
 }
 

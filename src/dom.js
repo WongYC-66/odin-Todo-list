@@ -78,9 +78,9 @@ function displayController(projectList) {
     contentBox.innerHTML = ''
 
     // project title
-    if(projectList.projectArr.length <= 0) return createAddBtn(contentBox, 'todo')
+    if (projectList.projectArr.length <= 0) return createAddBtn(contentBox, 'todo')
     let index = projectList.selectedIndex
-    if(!index || index > projectList.projectArr.length - 1) index = 0 // error prevent
+    if (!index || index > projectList.projectArr.length - 1) index = 0 // error prevent
     const selectedProject = projectList.projectArr[index] // by default, select project#1
     // console.log(projectList)
     const contentBoxTitle = createDiv('h1')
@@ -96,23 +96,26 @@ function displayController(projectList) {
     selectedProject.todoArray.forEach((item, i) => {
         // console.log(item)
         const newEl = createDiv('div', null, 'todo-card')
+        const checkBox = createDiv('input')
         const cardTitle = createDiv('p')
         const cardDate = createDiv('p')
         const editIcon = createDiv('img')
         const deleteIcon = createDiv('img')
         const priorityCard = createDiv('p')
         newEl.setAttribute('todo-index', i)
+        checkBox.setAttribute('type', 'checkbox')
+        checkBox.checked = item.isChecked
         cardTitle.textContent = item.title
         cardDate.textContent = item.dueDate
         editIcon.src = editImage
         editIcon.classList.add('icon')
         deleteIcon.src = deleteImage
         deleteIcon.classList.add('icon')
-
         priorityCard.textContent = item.priority
-        priorityCard.classList.add(`priority-${item.priority}`);
+        priorityCard.classList.add(`priority-${item.priority}`)
+        if(item.isChecked) newEl.classList.add('cross-out')
 
-        newEl.append(cardTitle, cardDate, editIcon, deleteIcon, priorityCard)
+        newEl.append(checkBox, cardTitle, cardDate, editIcon, deleteIcon, priorityCard)
         contentBox.appendChild(newEl)
     })
 
@@ -154,9 +157,9 @@ function initialiseForm({ container }) {
         const input4 = createDiv('select')
         const dropDownItem1 = createDiv('option')
         const dropDownItem2 = createDiv('option')
-        setAttributes(input1, {type: 'text', required : 'true'})
-        setAttributes(input2, {type: 'text', required : 'true'})
-        setAttributes(input3, {type: 'date', required : 'true'})
+        setAttributes(input1, { type: 'text', required: 'true' })
+        setAttributes(input2, { type: 'text', required: 'true' })
+        setAttributes(input3, { type: 'date', required: 'true' })
         dropDownItem1.textContent = 'low'
         dropDownItem2.textContent = 'high'
         input4.add(dropDownItem1)
@@ -164,7 +167,7 @@ function initialiseForm({ container }) {
 
         const addButton = createDiv('button', null, 'add')
         const cancelButton = createDiv('div', null, 'cancel')
-        setAttributes(addButton, {type: 'submit'})
+        setAttributes(addButton, { type: 'submit' })
         addButton.textContent = 'Add'
         cancelButton.textContent = 'Cancel'
         form.append(
@@ -196,12 +199,14 @@ function showAddTodoForm(type) {
     document.querySelector('#projectForm').style.visibility = 'hidden'
 
     let x = document.querySelector('#todoForm .add')
-    x.textContent =  type == 'edit' ? 'Edit' : 'Add'
+    x.textContent = type == 'edit' ? 'Edit' : 'Add'
 }
 function closeAddTodoForm() {
     document.querySelector('#container').classList.toggle('inactive')
     document.querySelector('#todoForm').style.visibility = 'hidden'
 }
 
-export { initialisePage, displayController, showAddProjectForm, 
-    closeAddProjectForm, showAddTodoForm ,closeAddTodoForm  }
+export {
+    initialisePage, displayController, showAddProjectForm,
+    closeAddProjectForm, showAddTodoForm, closeAddTodoForm
+}
