@@ -7,7 +7,7 @@ const path = require('path');
    },
    plugins: [
      new HtmlWebpackPlugin({
-       title: 'Production',
+       title: 'To-do-list',
      }),
    ],
    output: {
