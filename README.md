@@ -5,13 +5,13 @@ A web version of to-do-list where data is stored at browser. Created with html, 
 ![photo](todolist.png)
 
 ## Live demo
-- https://wongyc-66.github.io/odin-battleship/
+- https://wongyc-66.github.io/odin-Todo-list/
 
 ## Tech stack 
 - html, css, javascript
 
 ## Source
-- https://wongyc-66.github.io/odin-Todo-list/
+- https://github.com/WongYC-66/odin-Todo-list
 
 ## Installation
 1. npm install
